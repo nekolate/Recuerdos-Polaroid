@@ -38,13 +38,12 @@ export class HomePage implements OnInit {
       const guardadas = localStorage.getItem(STORAGE_KEY);
       if (guardadas) {
         const parsed: any[] = JSON.parse(guardadas);
-        // Mutar el arreglo existente en lugar de reasignarlo
         this.fotos.splice(0, this.fotos.length, ...parsed);
         console.log(`📂 Cargadas ${this.fotos.length} fotos desde localStorage`);
       }
     } catch (error) {
       console.error('❌ Error al cargar fotos:', error);
-      this.fotos.splice(0, this.fotos.length); // limpiar sin reasignar
+      this.fotos.splice(0, this.fotos.length); 
     }
     this.filtrarPorFecha();
   }
