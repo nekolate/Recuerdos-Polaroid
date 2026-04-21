@@ -25,7 +25,6 @@ export class HomePage implements OnInit {
     try {
       const json = JSON.stringify(this.fotos);
       localStorage.setItem(STORAGE_KEY, json);
-      // Verificación: leer de vuelta para confirmar que se guardó bien
       const verificacion = localStorage.getItem(STORAGE_KEY);
       const parseado = JSON.parse(verificacion || '[]');
       console.log(`✅ Guardadas ${parseado.length} fotos en localStorage`);
@@ -89,7 +88,6 @@ export class HomePage implements OnInit {
                 }),
                 fechaISO: ahora.toISOString().split('T')[0]
               };
-              // unshift muta el arreglo, no lo reasigna ✅
               this.fotos.unshift(nuevaFoto);
               this.guardarFotos();
               this.filtrarPorFecha();
@@ -142,7 +140,7 @@ export class HomePage implements OnInit {
           handler: () => {
             const idx = this.fotos.indexOf(foto);
             if (idx > -1) {
-              this.fotos.splice(idx, 1); // splice muta, no reasigna ✅
+              this.fotos.splice(idx, 1);
               this.guardarFotos();
               this.filtrarPorFecha();
             }
