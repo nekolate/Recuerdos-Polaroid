@@ -1,27 +1,291 @@
-#container {
-  text-align: center;
+/* =============================================
+   Fuentes - pegar en index.html dentro de <head>:
+   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+   ============================================= */
 
+ion-content {
+  --background: #e8e0d5;
+}
+
+/* Fondo con textura sutil */
+.galeria-bg {
+  min-height: 100%;
+  background-color: #e8e0d5;
+  background-image:
+    radial-gradient(ellipse at 15% 25%, rgba(180, 150, 100, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 75%, rgba(120, 90, 50, 0.10) 0%, transparent 55%);
+}
+
+.galeria-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 110px;
+  gap: 36px;
+}
+
+/* ---- Tarjeta polaroid ---- */
+.polaroid-wrapper {
+  width: 88%;
+  max-width: 310px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: entrar 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Rotaciones fijas por clase (evita recalcular en cada render) */
+.rot-0 { transform: rotate(-3deg); }
+.rot-1 { transform: rotate(2deg); }
+.rot-2 { transform: rotate(-1.5deg); }
+.rot-3 { transform: rotate(3.5deg); }
+.rot-4 { transform: rotate(-2.5deg); }
+
+.polaroid-wrapper:hover {
+  transform: rotate(0deg) scale(1.04) !important;
+  z-index: 10;
+}
+
+.tarjeta-polaroid {
+  background: #fefcf8;
+  padding: 12px 12px 0 12px;
+  border-radius: 2px;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,0.08),
+    0 10px 25px rgba(60, 40, 10, 0.22),
+    0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* Pin decorativo */
+.tarjeta-polaroid::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle at 30% 30%, #f0d060, #a07010);
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* ---- Zona clickable: imagen ---- */
+.foto-zona {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  display: block;
+}
+
+.foto-zona img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.foto-overlay {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  inset: 0;
+  background: rgba(180, 30, 20, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.foto-overlay ion-icon {
+  font-size: 44px;
+  color: #fff;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+.foto-zona:hover .foto-overlay {
+  opacity: 1;
+}
 
-  color: #8c8c8c;
+.foto-zona:hover img {
+  filter: brightness(0.78);
+  transform: scale(1.03);
+}
 
+/* ---- Zona clickable: texto ---- */
+.caption-zona {
+  position: relative;
+  padding: 14px 10px 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 0 0 2px 2px;
+}
+
+.caption-zona:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.caption-texto {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #3a2e22;
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+/* Bloque fecha + hora */
+.fecha-hora-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.caption-fecha,
+.caption-hora {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 0.88rem;
+  color: #8a7a65;
+}
+
+.meta-icon {
+  font-size: 12px;
+  color: #aaa;
+  vertical-align: middle;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: 14px;
+  color: #aaa;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.caption-zona:hover .edit-icon {
+  opacity: 1;
+}
+
+/* ---- Toolbar ---- */
+ion-toolbar ion-title {
+  font-family: 'Special Elite', cursive, serif;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-toolbar {
+  --min-height: 52px;
+  padding: 0 4px 6px;
+}
+
+.buscador-fecha {
+  --background: rgba(255,255,255,0.95);
+  --color: #3a2e22;
+  --placeholder-color: #888070;
+  --icon-color: #8a7a65;
+  --clear-button-color: #8a7a65;
+  --border-radius: 10px;
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.05rem;
+}
+
+.buscador-fecha .searchbar-input {
+  color: #3a2e22 !important;
+}
+
+.buscador-fecha .searchbar-input::placeholder {
+  color: #888070 !important;
+  opacity: 1 !important;
+}
+
+/* Chip filtro activo */
+.filtro-activo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 0;
+  animation: entrar 0.3s ease both;
+}
+
+.filtro-activo ion-chip {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  max-width: 90%;
+}
+
+.filtro-activo ion-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Estado vacío ---- */
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 24px 40px;
+  text-align: center;
+}
+
+.vacio-icono {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: rgba(58, 46, 34, 0.08);
+  border: 2px dashed rgba(58, 46, 34, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  animation: pulsar 3s ease-in-out infinite;
+}
+
+.vacio-icono ion-icon {
+  font-size: 46px;
+  color: #8a7a65;
+}
+
+.vacio-titulo {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #3a2e22;
+  margin: 0 0 8px;
+}
+
+.vacio-sub {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1rem;
+  color: #8a7a65;
   margin: 0;
+  max-width: 200px;
+  line-height: 1.4;
 }
 
-#container a {
-  text-decoration: none;
+/* ---- FAB ---- */
+ion-fab-button {
+  --box-shadow: 0 4px 16px rgba(192, 57, 43, 0.5);
+}
+
+/* ---- Animaciones ---- */
+@keyframes entrar {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.65; }
 }

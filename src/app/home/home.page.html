@@ -1,20 +1,87 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title class="toolbar-title">
+      <ion-icon name="aperture-outline"></ion-icon>
+      Recuerdos Polaroid
     </ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar color="dark" class="search-toolbar">
+    <ion-searchbar
+      [(ngModel)]="filtroBusqueda"
+      (ionInput)="filtrarPorFecha()"
+      placeholder="📅 Buscar por fecha — ej: 21 de abril de 2026"
+      debounce="300"
+      color="light"
+      class="buscador-fecha"
+      [showClearButton]="'always'"
+    ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="galeria-bg">
+    <div class="galeria-container">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <div *ngIf="filtroBusqueda" class="filtro-activo">
+        <ion-chip color="warning" (click)="limpiarFiltro()">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <ion-label>{{ fotosFiltradas.length }} resultado(s) para "{{ filtroBusqueda }}"</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+      </div>
+
+      <div
+        *ngFor="let foto of fotosFiltradas; let i = index"
+        class="polaroid-wrapper"
+        [ngClass]="'rot-' + (i % 5)"
+      >
+        <div class="tarjeta-polaroid">
+
+
+          <div class="foto-zona" (click)="confirmarBorrado(foto)">
+            <img [src]="foto.webviewPath" alt="Foto capturada" />
+            <div class="foto-overlay">
+              <ion-icon name="trash-outline"></ion-icon>
+            </div>
+          </div>
+
+          <div class="caption-zona" (click)="editarTexto(foto)">
+            <p class="caption-texto">{{ foto.texto }}</p>
+            <div class="fecha-hora-wrapper">
+              <ion-icon name="calendar-outline" class="meta-icon"></ion-icon>
+              <span class="caption-fecha">{{ foto.fecha }}</span>
+              <ion-icon name="time-outline" class="meta-icon"></ion-icon>
+              <span class="caption-hora">{{ foto.hora }}</span>
+            </div>
+            <ion-icon name="pencil-outline" class="edit-icon"></ion-icon>
+          </div>
+
+        </div>
+      </div>
+
+      <div *ngIf="fotosFiltradas.length === 0 && fotos.length > 0" class="estado-vacio">
+        <div class="vacio-icono">
+          <ion-icon name="search-outline"></ion-icon>
+        </div>
+        <p class="vacio-titulo">Sin resultados</p>
+        <p class="vacio-sub">No hay fotos para la fecha "{{ filtroBusqueda }}"</p>
+      </div>
+
+      <div *ngIf="fotos.length === 0" class="estado-vacio">
+        <div class="vacio-icono">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+        <p class="vacio-titulo">Sin fotos aún</p>
+        <p class="vacio-sub">Presiona el botón rojo para comenzar</p>
+      </div>
+
+    </div>
   </div>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button color="danger" (click)="tomarFoto()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
