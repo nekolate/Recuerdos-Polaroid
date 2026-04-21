@@ -43,7 +43,11 @@ export class HomePage implements OnInit {
       }
     } catch (error) {
       console.error('❌ Error al cargar fotos:', error);
+<<<<<<< HEAD
       this.fotos.splice(0, this.fotos.length);
+=======
+      this.fotos.splice(0, this.fotos.length); 
+>>>>>>> 24320c18b35104ae4772732f66b17beda5092085
     }
     this.filtrarPorFecha();
   }
